@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kendall — Career Development Intake</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1F3A5F;
+    --mid: #2E6DA4;
+    --soft: #EBF3FB;
+    --purple: #7F77DD;
+    --purple-light: #EEEDFE;
+    --purple-mid: #534AB7;
+    --cream: #FAFAF8;
+    --border: #E0E6EE;
+    --text: #1A2535;
+    --muted: #6B7A8D;
+    --green: #2A7A55;
+    --green-light: #EBF7F1;
+    --white: #FFFFFF;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(30,60,100,0.07);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 80px;
+  }
+
+  .header {
+    background: var(--navy);
+    padding: 52px 40px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    right: -60px; top: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(127,119,221,0.2);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    right: 80px; bottom: -80px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(46,109,164,0.15);
+  }
+  .header-inner { max-width: 760px; margin: 0 auto; position: relative; z-index: 1; }
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    color: #fff;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    font-weight: 400;
+  }
+  .header p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    max-width: 520px;
+    font-weight: 300;
+  }
+
+  .context-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+  }
+  .context-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 16px 0;
+    border-left: 3px solid var(--purple);
+    padding-left: 14px;
+    font-size: 13.5px;
+    color: #444;
+    line-height: 1.7;
+  }
+
+  .progress-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+  }
+  .progress-bar-inner { max-width: 760px; margin: 0 auto; width: 100%; display: flex; }
+  .prog-step {
+    flex: 1;
+    padding: 14px 4px 12px;
+    text-align: center;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .prog-step.active { color: var(--navy); border-bottom-color: var(--purple); }
+  .prog-step.done { color: var(--green); border-bottom-color: var(--green-light); }
+
+  .main { max-width: 760px; margin: 0 auto; padding: 40px 20px 0; }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--purple);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 32px;
+    max-width: 580px;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .q-label {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+    line-height: 1.5;
+  }
+  .q-hint {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    resize: vertical;
+    min-height: 78px;
+    margin-top: 8px;
+    outline: none;
+    transition: border-color 0.15s;
+    line-height: 1.6;
+  }
+  textarea:focus { border-color: var(--purple); background: var(--white); }
+
+  .checkbox-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+
+  .check-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.1s, border-color 0.1s;
+    user-select: none;
+    background: var(--cream);
+  }
+  .check-option:hover { background: var(--purple-light); border-color: #b5b0f0; }
+  .check-option.selected { background: var(--purple-light); border-color: var(--purple); }
+
+  .check-box {
+    width: 18px; height: 18px;
+    border: 1.5px solid #ccc;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 11px;
+    color: transparent;
+    margin-top: 1px;
+    transition: all 0.1s;
+  }
+  .check-option.selected .check-box { border-color: var(--purple); background: var(--purple); color: #fff; }
+  .check-text { font-size: 13.5px; color: #333; line-height: 1.5; }
+
+  .scale-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .scale-btn {
+    width: 42px; height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--cream);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.1s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .scale-btn:hover { background: var(--purple-light); border-color: #b5b0f0; }
+  .scale-btn.selected { background: var(--purple); border-color: var(--purple); color: #fff; }
+  .scale-labels {
+    display: flex; justify-content: space-between;
+    font-size: 11.5px; color: var(--muted);
+    margin-top: 5px; padding: 0 2px;
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    padding-bottom: 40px;
+  }
+
+  .btn {
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-back { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+  .btn-back:hover { border-color: var(--muted); color: var(--text); }
+  .btn-next { background: var(--navy); border: 1px solid var(--navy); color: #fff; }
+  .btn-next:hover { background: var(--purple-mid); border-color: var(--purple-mid); }
+  .btn-submit { background: var(--purple); border: 1px solid var(--purple); color: #fff; }
+  .btn-submit:hover { background: var(--purple-mid); border-color: var(--purple-mid); }
+
+  .done-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px 40px;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .done-icon {
+    width: 64px; height: 64px;
+    background: var(--green-light);
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .done-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 12px;
+    font-weight: 400;
+  }
+  .done-screen p { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 440px; margin: 0 auto 32px; }
+
+  .print-btn {
+    display: inline-block;
+    border: 1px solid var(--purple);
+    color: var(--purple);
+    background: var(--white);
+    border-radius: 8px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .print-btn:hover { background: var(--purple-light); }
+
+  .summary-block { display: none; text-align: left; margin-top: 32px; }
+  .summary-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .summary-section-title {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--purple);
+    font-weight: 500;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-row { margin-bottom: 14px; }
+  .summary-q { font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+  .summary-a { font-size: 14px; color: var(--text); line-height: 1.55; white-space: pre-line; }
+
+  @media (max-width: 600px) {
+    .header { padding: 36px 20px 32px; }
+    .header h1 { font-size: 28px; }
+    .progress-bar { padding: 0 8px; }
+    .prog-step { font-size: 10px; padding: 12px 2px; }
+    .main { padding: 28px 14px 0; }
+    .context-wrap { padding: 0 16px; }
+  }
+
+  @media print {
+    .progress-bar, .nav-row, .btn, .print-btn, .header, .context-wrap { display: none !important; }
+    .section { display: block !important; }
+    .done-screen { display: block !important; padding: 0; }
+    .summary-block { display: block !important; }
+    .done-icon, .done-screen h2, .done-screen p { display: none; }
+    body { padding: 0; background: #fff; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-tag">Genea Marketing · Confidential</div>
+    <h1>Career Development<br><em>Intake — Kendall</em></h1>
+    <p>This is your space to reflect on where you are, what you want to build, and where you want to go. Be honest over polished — that's what makes this useful.</p>
+  </div>
+</div>
+
+<div class="context-wrap">
+  <div class="context-inner">
+    <strong>A quick note:</strong> We're currently in a budget replanning cycle that may affect near-term headcount timing. I want to make sure we use this conversation to think clearly about your growth and trajectory regardless of how that process plays out.
+  </div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-bar-inner">
+    <div class="prog-step active" onclick="goTo(0)">Where you are</div>
+    <div class="prog-step" onclick="goTo(1)">Demand engine</div>
+    <div class="prog-step" onclick="goTo(2)">Leadership</div>
+    <div class="prog-step" onclick="goTo(3)">Throughput</div>
+    <div class="prog-step" onclick="goTo(4)">Growth</div>
+    <div class="prog-step" onclick="goTo(5)">Looking ahead</div>
+  </div>
+</div>
+
+<div class="main" id="mainForm">
+
+  <!-- SECTION 1 -->
+  <div class="section active" id="sec-0">
+    <div class="section-label">Section 1 of 6</div>
+    <div class="section-title">Where you are right now</div>
+    <div class="section-desc">Let's start with how you're experiencing the role today — what's giving you energy and where you're feeling the friction.</div>
+
+    <div class="card">
+      <div class="q-label">What part of your role feels most energizing to you right now?</div>
+      <div class="q-hint">Could be a channel, a project, a type of work — whatever's giving you momentum.</div>
+      <textarea id="q1a" rows="3" placeholder="What's clicking..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">What part of your role feels hardest or most draining right now?</div>
+      <div class="q-hint">Be honest — this helps me understand where to focus our support.</div>
+      <textarea id="q1b" rows="3" placeholder="What's taking the most out of you..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">How confident do you feel in your ownership of pipeline performance right now?</div>
+      <div class="q-hint">1 = still finding my footing &nbsp;·&nbsp; 5 = fully in command of this</div>
+      <div class="scale-row" id="scale-pipeline">
+        <div class="scale-btn" onclick="setScale('scale-pipeline',1)">1</div>
+        <div class="scale-btn" onclick="setScale('scale-pipeline',2)">2</div>
+        <div class="scale-btn" onclick="setScale('scale-pipeline',3)">3</div>
+        <div class="scale-btn" onclick="setScale('scale-pipeline',4)">4</div>
+        <div class="scale-btn" onclick="setScale('scale-pipeline',5)">5</div>
+      </div>
+      <div class="scale-labels"><span>Still finding my footing</span><span>Fully in command</span></div>
+      <textarea id="q1c" rows="2" placeholder="Anything you'd add — where you feel strong, where the gaps are..." style="margin-top:12px;"></textarea>
+    </div>
+
+    <div class="nav-row">
+      <span></span>
+      <button class="btn btn-next" onclick="goTo(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="sec-1">
+    <div class="section-label">Section 2 of 6</div>
+    <div class="section-title">Your demand engine</div>
+    <div class="section-desc">Let's get into how you're thinking about channels, funnel performance, and pipeline strategy.</div>
+
+    <div class="card">
+      <div class="q-label">Which channels do you feel you're owning most effectively right now?</div>
+      <div class="q-hint">Select all that feel true.</div>
+      <div class="checkbox-list" id="ck-channels">
+        <div class="check-option" onclick="toggleCheck(this,'ck-channels',99)"><div class="check-box">✓</div><span class="check-text">Paid media — I'm driving strategy, not just execution</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-channels',99)"><div class="check-box">✓</div><span class="check-text">Lifecycle / email — strong segmentation and nurture programs in place</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-channels',99)"><div class="check-box">✓</div><span class="check-text">Events — I'm driving the strategy, not just project managing</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-channels',99)"><div class="check-box">✓</div><span class="check-text">ABM — I have a clear program with measurable account engagement</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-channels',99)"><div class="check-box">✓</div><span class="check-text">Partner / co-marketing — I'm coordinating and executing effectively</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-channels',99)"><div class="check-box">✓</div><span class="check-text">Intent-based / AI-driven discovery — I'm actively testing here</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="q-label">Where in the funnel do you feel least in control of the outcome right now?</div>
+      <div class="q-hint">Pick the one that feels most true.</div>
+      <div class="checkbox-list" id="ck-funnel">
+        <div class="check-option" onclick="toggleCheck(this,'ck-funnel',1)"><div class="check-box">✓</div><span class="check-text">Top of funnel — not confident in net-new lead volume or quality</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-funnel',1)"><div class="check-box">✓</div><span class="check-text">MQL → SQL — handoff to BDR is inconsistent or slow</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-funnel',1)"><div class="check-box">✓</div><span class="check-text">SQL → SQO — pipeline is created but not moving forward</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-funnel',1)"><div class="check-box">✓</div><span class="check-text">SQO → Closed Won — I don't have visibility or influence here</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-funnel',1)"><div class="check-box">✓</div><span class="check-text">Expansion / cross-sell — not well integrated into current programs</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="q-label">If you had to name one thing most limiting pipeline performance right now, what would it be?</div>
+      <div class="q-hint">Could be a resource gap, a process issue, a data problem — be specific.</div>
+      <textarea id="q2a" rows="3" placeholder="The biggest constraint right now is..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">How clearly can you tie budget decisions back to pipeline outcomes?</div>
+      <div class="q-hint">1 = mostly going on intuition &nbsp;·&nbsp; 5 = decisions are tightly tied to ROI data</div>
+      <div class="scale-row" id="scale-budget">
+        <div class="scale-btn" onclick="setScale('scale-budget',1)">1</div>
+        <div class="scale-btn" onclick="setScale('scale-budget',2)">2</div>
+        <div class="scale-btn" onclick="setScale('scale-budget',3)">3</div>
+        <div class="scale-btn" onclick="setScale('scale-budget',4)">4</div>
+        <div class="scale-btn" onclick="setScale('scale-budget',5)">5</div>
+      </div>
+      <div class="scale-labels"><span>Mostly intuition</span><span>Tightly tied to ROI data</span></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goTo(0)">← Back</button>
+      <button class="btn btn-next" onclick="goTo(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="sec-2">
+    <div class="section-label">Section 3 of 6</div>
+    <div class="section-title">Leadership &amp; influence</div>
+    <div class="section-desc">This section is about how you show up in rooms — with Sales, with RevOps, with leadership — and how you're growing as the person running those conversations.</div>
+
+    <div class="card">
+      <div class="q-label">How would you describe your current working relationship with Sales and BDR?</div>
+      <div class="q-hint">Think about alignment, trust, and how your name lands in those conversations.</div>
+      <textarea id="q3a" rows="3" placeholder="How I'd describe the relationship right now..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">When you're in a cross-functional meeting — with Sales, RevOps, or leadership — how confident do you feel?</div>
+      <div class="q-hint">Select the statement that best reflects where you are today.</div>
+      <div class="checkbox-list" id="ck-xfn">
+        <div class="check-option" onclick="toggleCheck(this,'ck-xfn',1)"><div class="check-box">✓</div><span class="check-text">I listen well but often hold back from pushing my point of view</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-xfn',1)"><div class="check-box">✓</div><span class="check-text">I contribute but sometimes struggle to land my recommendations with conviction</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-xfn',1)"><div class="check-box">✓</div><span class="check-text">I hold my own and feel heard, but I'm still building credibility at the leadership level</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-xfn',1)"><div class="check-box">✓</div><span class="check-text">I walk in with a clear point of view and can influence the outcome of the meeting</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="q-label">When you're the one running a meeting — how do you feel about how you're showing up?</div>
+      <div class="q-hint">Select all that feel honest.</div>
+      <div class="checkbox-list" id="ck-mtg">
+        <div class="check-option" onclick="toggleCheck(this,'ck-mtg',99)"><div class="check-box">✓</div><span class="check-text">I come in prepared with a clear agenda and desired outcome</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-mtg',99)"><div class="check-box">✓</div><span class="check-text">I'm getting better at driving to decisions rather than just sharing updates</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-mtg',99)"><div class="check-box">✓</div><span class="check-text">I sometimes lose control of the room or let the conversation drift</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-mtg',99)"><div class="check-box">✓</div><span class="check-text">I find it hard to hold my ground when senior stakeholders push back</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-mtg',99)"><div class="check-box">✓</div><span class="check-text">I don't always leave meetings with clear next steps or owners</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-mtg',99)"><div class="check-box">✓</div><span class="check-text">I close meetings well — clear summary, owners, and follow-through</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="q-label">Is there a leadership moment in the last 3–6 months where you felt like you really showed up? What made it work?</div>
+      <textarea id="q3b" rows="3" placeholder="What the situation was, what I did, what made it land..."></textarea>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goTo(1)">← Back</button>
+      <button class="btn btn-next" onclick="goTo(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="sec-3">
+    <div class="section-label">Section 4 of 6</div>
+    <div class="section-title">Throughput &amp; prioritization</div>
+    <div class="section-desc">Senior demand gen is a high-volume role — campaigns, reporting, stakeholder requests, strategy work, all at once. Let's talk about how you're managing that.</div>
+
+    <div class="card">
+      <div class="q-label">When you have a lot going on at once, how do you tend to operate?</div>
+      <div class="q-hint">Pick the one that feels most honest.</div>
+      <div class="checkbox-list" id="ck-volume">
+        <div class="check-option" onclick="toggleCheck(this,'ck-volume',1)"><div class="check-box">✓</div><span class="check-text">I stay in execution mode and keep things moving, but strategy work slips</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-volume',1)"><div class="check-box">✓</div><span class="check-text">I can hold a lot at once but quality suffers when volume spikes</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-volume',1)"><div class="check-box">✓</div><span class="check-text">I struggle to produce output across multiple workstreams simultaneously without things stalling</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-volume',1)"><div class="check-box">✓</div><span class="check-text">I'm pretty dialed in — I can prioritize and still ship quality work across most of my lanes</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="q-label">What does your current system for prioritizing your week look like?</div>
+      <div class="q-hint">Be honest — no system is fine to say. That's useful information too.</div>
+      <textarea id="q4a" rows="3" placeholder="How I decide what gets my focus and in what order..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">Is there a project or workstream right now that you feel hasn't gotten the attention it deserves? What's getting in the way?</div>
+      <textarea id="q4b" rows="3" placeholder="What's not moving the way I'd want and why..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">How comfortable are you making a hard call to deprioritize something when capacity is tight?</div>
+      <div class="q-hint">1 = I tend to take it all on and push through &nbsp;·&nbsp; 5 = I make clear calls and don't second-guess them</div>
+      <div class="scale-row" id="scale-delegate">
+        <div class="scale-btn" onclick="setScale('scale-delegate',1)">1</div>
+        <div class="scale-btn" onclick="setScale('scale-delegate',2)">2</div>
+        <div class="scale-btn" onclick="setScale('scale-delegate',3)">3</div>
+        <div class="scale-btn" onclick="setScale('scale-delegate',4)">4</div>
+        <div class="scale-btn" onclick="setScale('scale-delegate',5)">5</div>
+      </div>
+      <div class="scale-labels"><span>I take it all on</span><span>I make clear calls</span></div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goTo(2)">← Back</button>
+      <button class="btn btn-next" onclick="goTo(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section" id="sec-4">
+    <div class="section-label">Section 5 of 6</div>
+    <div class="section-title">Growth &amp; skills</div>
+    <div class="section-desc">Where do you want to invest in yourself over the next 12 months? Let's make sure the plan actually reflects what you care about.</div>
+
+    <div class="card">
+      <div class="q-label">Which of these feel like areas you want to go deeper on in the next 12 months?</div>
+      <div class="q-hint">Select up to three.</div>
+      <div class="checkbox-list" id="ck-growth">
+        <div class="check-option" onclick="toggleCheck(this,'ck-growth',3)"><div class="check-box">✓</div><span class="check-text">Attribution and revenue analytics — getting tighter on pipeline contribution</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-growth',3)"><div class="check-box">✓</div><span class="check-text">ABM strategy — building or maturing a real account-based motion</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-growth',3)"><div class="check-box">✓</div><span class="check-text">Budget ownership and forecasting — getting more confident with investment decisions</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-growth',3)"><div class="check-box">✓</div><span class="check-text">Executive presence — being heard and taken seriously by leadership</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-growth',3)"><div class="check-box">✓</div><span class="check-text">Running high-stakes meetings and cross-functional alignment sessions</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-growth',3)"><div class="check-box">✓</div><span class="check-text">Developing and coaching others — elevating the people around me</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-growth',3)"><div class="check-box">✓</div><span class="check-text">GTM strategy — being a bigger voice in how we go to market</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-growth',3)"><div class="check-box">✓</div><span class="check-text">Partner and channel marketing — building out co-marketing programs</span></div>
+      </div>
+      <textarea id="q5a" rows="2" placeholder="Anything not on the list you've been wanting to go deeper on..." style="margin-top:12px;"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">How do you learn best?</div>
+      <div class="q-hint">Pick up to two.</div>
+      <div class="checkbox-list" id="ck-learn">
+        <div class="check-option" onclick="toggleCheck(this,'ck-learn',2)"><div class="check-box">✓</div><span class="check-text">Doing — jump in and figure it out in real time</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-learn',2)"><div class="check-box">✓</div><span class="check-text">Watching — seeing how someone more experienced handles it first</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-learn',2)"><div class="check-box">✓</div><span class="check-text">Feedback — trying, getting direct input, adjusting quickly</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-learn',2)"><div class="check-box">✓</div><span class="check-text">Research — going deep on frameworks before acting</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-learn',2)"><div class="check-box">✓</div><span class="check-text">Talking it through — processing out loud with someone I trust</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-learn',2)"><div class="check-box">✓</div><span class="check-text">Structured programs — courses, coaching, or clear frameworks</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="q-label">Think about a moment in your career when you grew a lot, fast. What made that happen?</div>
+      <textarea id="q5b" rows="3" placeholder="The situation, what clicked, what made the growth stick..."></textarea>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goTo(3)">← Back</button>
+      <button class="btn btn-next" onclick="goTo(5)">Next →</button>
+    </div>
+  </div>
+
+  <!-- SECTION 6 -->
+  <div class="section" id="sec-5">
+    <div class="section-label">Section 6 of 6</div>
+    <div class="section-title">Looking ahead</div>
+    <div class="section-desc">Last section. This is about the bigger picture — where you want to be headed and what you need to get there.</div>
+
+    <div class="card">
+      <div class="q-label">A year from now, what does stepping up look like for you in this role?</div>
+      <div class="q-hint">Not your job description — what it would actually feel like to be operating at a genuinely higher level.</div>
+      <textarea id="q6a" rows="3" placeholder="What 'bigger' looks like to me..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">What's the one thing — if you got really good at it — that would change the most about the impact you have?</div>
+      <textarea id="q6b" rows="3" placeholder="The skill, behavior, or capability that would move the needle most..."></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">What do you need most from me right now?</div>
+      <div class="q-hint">Select all that apply.</div>
+      <div class="checkbox-list" id="ck-support">
+        <div class="check-option" onclick="toggleCheck(this,'ck-support',99)"><div class="check-box">✓</div><span class="check-text">More visibility into where I stand and what success looks like</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-support',99)"><div class="check-box">✓</div><span class="check-text">More candid feedback — tell me what you're actually seeing</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-support',99)"><div class="check-box">✓</div><span class="check-text">More opportunities to lead — meetings, projects, cross-functional initiatives</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-support',99)"><div class="check-box">✓</div><span class="check-text">Help thinking through strategic problems, not just execution</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-support',99)"><div class="check-box">✓</div><span class="check-text">Space to try things and learn from them, even if they don't work</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-support',99)"><div class="check-box">✓</div><span class="check-text">More protection from noise so I can focus on high-impact work</span></div>
+        <div class="check-option" onclick="toggleCheck(this,'ck-support',99)"><div class="check-box">✓</div><span class="check-text">Clearer context on company direction and how marketing fits into it</span></div>
+      </div>
+      <textarea id="q6c" rows="2" placeholder="Anything else that would help..." style="margin-top:12px;"></textarea>
+    </div>
+
+    <div class="card">
+      <div class="q-label">Is there anything you've been sitting on — a frustration, a hope, a question — that you want to make sure we get to in this conversation?</div>
+      <textarea id="q6d" rows="3" placeholder="Open space — anything goes..."></textarea>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-back" onclick="goTo(4)">← Back</button>
+      <button class="btn btn-submit" onclick="submitForm()">Submit my responses</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- DONE SCREEN -->
+<div class="done-screen" id="doneScreen">
+  <div class="done-icon">✓</div>
+  <h2>You're all set, Kendall.</h2>
+  <p>Save a PDF of your responses to share before our conversation — it'll help us make the most of our time together.</p>
+  <button class="print-btn" onclick="printSummary()">Save / print PDF summary</button>
+  <div class="summary-block" id="summaryBlock">
+    <div id="summaryContent"></div>
+  </div>
+</div>
+
+<script>
+  let current = 0;
+  const scaleValues = {};
+
+  function goTo(idx) {
+    document.getElementById('sec-' + current).classList.remove('active');
+    const steps = document.querySelectorAll('.prog-step');
+    steps[current].classList.remove('active');
+    if (idx > current) steps[current].classList.add('done');
+    current = idx;
+    document.getElementById('sec-' + current).classList.add('active');
+    steps.forEach((s, i) => {
+      if (i === current) { s.classList.add('active'); s.classList.remove('done'); }
+      else if (i < current) { s.classList.remove('active'); s.classList.add('done'); }
+      else { s.classList.remove('active', 'done'); }
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleCheck(el, groupId, max) {
+    const group = document.getElementById(groupId);
+    const selected = group.querySelectorAll('.check-option.selected');
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+    } else {
+      if (max === 1) selected.forEach(s => s.classList.remove('selected'));
+      else if (selected.length >= max && max !== 99) return;
+      el.classList.add('selected');
+    }
+  }
+
+  function setScale(groupId, val) {
+    scaleValues[groupId] = val;
+    document.getElementById(groupId).querySelectorAll('.scale-btn').forEach((b, i) => {
+      b.classList.toggle('selected', i + 1 === val);
+    });
+  }
+
+  function getChecked(groupId) {
+    const group = document.getElementById(groupId);
+    if (!group) return '—';
+    const items = group.querySelectorAll('.check-option.selected .check-text');
+    return items.length ? Array.from(items).map(i => '· ' + i.textContent.trim()).join('\n') : '—';
+  }
+
+  function getScale(id) { return scaleValues[id] ? scaleValues[id] + ' / 5' : '—'; }
+
+  function val(id) {
+    const el = document.getElementById(id);
+    return el && el.value.trim() ? el.value.trim() : '—';
+  }
+
+  // ▼▼ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ▼▼
+  const SUBMIT_URL = 'https://script.google.com/macros/s/AKfycbzWIRn0MomE97aEcSzFcAE-4L4tMzaeFOcLnG9cXfJZwY7uL6X0U_Q-1o4zcPvd3qMQ/exec';
+
+  function buildSections() {
+    return [
+      { title: 'Where you are right now', rows: [
+        { q: 'What part of your role feels most energizing?', a: val('q1a') },
+        { q: 'What part feels hardest or most draining?', a: val('q1b') },
+        { q: 'Confidence in pipeline ownership (1–5)', a: getScale('scale-pipeline') },
+        { q: 'Pipeline ownership notes', a: val('q1c') },
+      ]},
+      { title: 'Your demand engine', rows: [
+        { q: 'Channels owned most effectively', a: getChecked('ck-channels') },
+        { q: 'Where in the funnel you feel least in control', a: getChecked('ck-funnel') },
+        { q: 'Biggest constraint on pipeline performance', a: val('q2a') },
+        { q: 'Budget-to-pipeline confidence (1–5)', a: getScale('scale-budget') },
+      ]},
+      { title: 'Leadership & influence', rows: [
+        { q: 'Current relationship with Sales and BDR', a: val('q3a') },
+        { q: 'Cross-functional meeting confidence', a: getChecked('ck-xfn') },
+        { q: 'How you show up when running meetings', a: getChecked('ck-mtg') },
+        { q: 'A leadership moment that worked', a: val('q3b') },
+      ]},
+      { title: 'Throughput & prioritization', rows: [
+        { q: 'How you operate under high volume', a: getChecked('ck-volume') },
+        { q: 'Your current prioritization system', a: val('q4a') },
+        { q: 'A project not getting the attention it deserves', a: val('q4b') },
+        { q: 'Comfort with deprioritizing under pressure (1–5)', a: getScale('scale-delegate') },
+      ]},
+      { title: 'Growth & skills', rows: [
+        { q: 'Areas to go deeper on in the next 12 months', a: getChecked('ck-growth') },
+        { q: 'Other growth areas', a: val('q5a') },
+        { q: 'How you learn best', a: getChecked('ck-learn') },
+        { q: 'A time you grew a lot, fast — what made it happen', a: val('q5b') },
+      ]},
+      { title: 'Looking ahead', rows: [
+        { q: 'What stepping up looks like a year from now', a: val('q6a') },
+        { q: 'The one thing that would change your impact most', a: val('q6b') },
+        { q: 'What you need most from your manager', a: getChecked('ck-support') },
+        { q: 'Additional support notes', a: val('q6c') },
+        { q: 'Anything you want to make sure we cover', a: val('q6d') },
+      ]},
+    ];
+  }
+
+  function submitForm() {
+    const btn = document.querySelector('.btn-submit');
+    if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+
+    const sections = buildSections();
+    const flat = {};
+    sections.forEach(s => s.rows.forEach(r => { flat[r.q] = r.a; }));
+    const payload = {
+      submittedAt: new Date().toISOString(),
+      form: 'Kendall — Career Development Intake',
+      sections: sections,
+      responses: flat
+    };
+
+    fetch(SUBMIT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).then(() => {
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('doneScreen').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }).catch(err => {
+      if (btn) { btn.disabled = false; btn.textContent = 'Submit my responses'; }
+      alert('Sorry, something went wrong sending your responses. Please try again, or save a PDF copy as a backup.\n\n' + err);
+    });
+  }
+
+  function printSummary() {
+    document.getElementById('summaryBlock').style.display = 'block';
+    const sections = buildSections();
+
+    let html = '<div style="border-top:3px solid #7F77DD;padding-top:20px;margin-bottom:24px;"><p style="font-size:11px;color:#888;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">Career development intake · Genea Marketing</p><p style="font-family:Georgia,serif;font-size:22px;color:#1F3A5F;font-weight:400;">Kendall — response summary</p></div>';
+    sections.forEach(s => {
+      html += '<div class="summary-card"><div class="summary-section-title">' + s.title + '</div>';
+      s.rows.forEach(r => {
+        html += '<div class="summary-row"><div class="summary-q">' + r.q + '</div><div class="summary-a">' + r.a + '</div></div>';
+      });
+      html += '</div>';
+    });
+    document.getElementById('summaryContent').innerHTML = html;
+    setTimeout(() => window.print(), 200);
+  }
+</script>
+</body>
+</html>
